@@ -19,6 +19,7 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart'
 import '../../features/auth/data/repositories/auth_repository_impl.dart'
     as _i153;
 import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
+import '../../features/auth/domain/usecases/login_usecase.dart' as _i188;
 import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
 import '../network/interceptors/connectivity_interceptor.dart' as _i693;
 import '../network/network_info.dart' as _i932;
@@ -52,8 +53,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i787.AuthRepository>(
       () => _i153.AuthRepositoryImpl(gh<_i107.AuthRemoteDataSource>()),
     );
+    gh.factory<_i188.LoginUseCase>(
+      () => _i188.LoginUseCase(gh<_i787.AuthRepository>()),
+    );
     gh.factory<_i69.LoginCubit>(
-      () => _i69.LoginCubit(gh<_i787.AuthRepository>()),
+      () => _i69.LoginCubit(gh<_i188.LoginUseCase>()),
     );
     return this;
   }

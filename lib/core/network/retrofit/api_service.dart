@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 import 'package:network_leyer/core/network/api_endpoints.dart';
 import 'package:network_leyer/core/network/base_response.dart';
 import 'package:network_leyer/features/auth/data/models/login_data.dart';
