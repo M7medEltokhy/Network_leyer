@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network_leyer/core/network/api_endpoints.dart';
+import 'package:network_leyer/core/network/base_response.dart';
+import 'package:network_leyer/features/auth/data/models/login_data.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:network_leyer/features/auth/models/login_request.dart';
-import 'package:network_leyer/features/auth/models/login_response.dart';
+import 'package:network_leyer/features/auth/data/models/login_request.dart';
 
 part 'api_service.g.dart';
 
@@ -13,13 +14,6 @@ abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
 
   @POST(ApiEndpoints.login)
-  Future<LoginResponse> login(
-    @Body() LoginRequest request,
-  );
+  Future<BaseResponse<LoginData>> login(@Body() LoginRequest request);
 }
 
-@module
-abstract class ApiServiceModule {
-  @lazySingleton
-  ApiService apiService(Dio dio) => ApiService(dio);
-}

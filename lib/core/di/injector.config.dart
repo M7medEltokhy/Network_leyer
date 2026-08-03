@@ -14,11 +14,16 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../features/auth/cubit/login_cubit.dart' as _i796;
-import '../../features/auth/repo/auth_repo.dart' as _i109;
-import '../network/clients/dio_client.dart' as _i466;
+import '../../features/auth/data/datasources/auth_remote_data_source.dart'
+    as _i107;
+import '../../features/auth/data/repositories/auth_repository_impl.dart'
+    as _i153;
+import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
+import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
+import '../network/interceptors/connectivity_interceptor.dart' as _i693;
 import '../network/network_info.dart' as _i932;
 import '../network/retrofit/api_service.dart' as _i318;
+import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -27,29 +32,31 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    final connectivityModule = _$ConnectivityModule();
-    final networkModule = _$NetworkModule();
-    final apiServiceModule = _$ApiServiceModule();
-    gh.lazySingleton<_i895.Connectivity>(() => connectivityModule.connectivity);
+    final registerModule = _$RegisterModule();
+    gh.lazySingleton<_i895.Connectivity>(() => registerModule.connectivity);
     gh.lazySingleton<_i932.NetworkInfo>(
       () => _i932.NetworkInfo(gh<_i895.Connectivity>()),
     );
+    gh.factory<_i693.ConnectivityInterceptor>(
+      () => _i693.ConnectivityInterceptor(gh<_i932.NetworkInfo>()),
+    );
     gh.lazySingleton<_i361.Dio>(
-      () => networkModule.dio(gh<_i932.NetworkInfo>()),
+      () => registerModule.dio(gh<_i693.ConnectivityInterceptor>()),
     );
     gh.lazySingleton<_i318.ApiService>(
-      () => apiServiceModule.apiService(gh<_i361.Dio>()),
+      () => registerModule.apiService(gh<_i361.Dio>()),
     );
-    gh.lazySingleton<_i109.AuthRepo>(
-      () => _i109.AuthRepo(gh<_i318.ApiService>()),
+    gh.lazySingleton<_i107.AuthRemoteDataSource>(
+      () => _i107.AuthRemoteDataSource(gh<_i318.ApiService>()),
     );
-    gh.factory<_i796.LoginCubit>(() => _i796.LoginCubit(gh<_i109.AuthRepo>()));
+    gh.lazySingleton<_i787.AuthRepository>(
+      () => _i153.AuthRepositoryImpl(gh<_i107.AuthRemoteDataSource>()),
+    );
+    gh.factory<_i69.LoginCubit>(
+      () => _i69.LoginCubit(gh<_i787.AuthRepository>()),
+    );
     return this;
   }
 }
 
-class _$ConnectivityModule extends _i932.ConnectivityModule {}
-
-class _$NetworkModule extends _i466.NetworkModule {}
-
-class _$ApiServiceModule extends _i318.ApiServiceModule {}
+class _$RegisterModule extends _i291.RegisterModule {}
