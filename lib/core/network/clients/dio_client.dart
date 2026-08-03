@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:network_leyer/core/network/api_endpoints.dart';
 import 'package:network_leyer/core/network/network_info.dart';
 
 @module
@@ -8,7 +9,7 @@ abstract class NetworkModule {
   Dio dio(NetworkInfo networkInfo) {
     final dio = Dio(
       BaseOptions(
-        baseUrl: "https://v2.golden4tic.com/api/v1/",
+        baseUrl: ApiEndpoints.baseUrl,
         connectTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 15),
         headers: {
