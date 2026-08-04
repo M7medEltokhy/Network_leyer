@@ -13,7 +13,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<LoginResult> login(LoginRequest request) async {
-    final response = await safeApiCall(() => authApiClient.login(request));
+    final response = await safeApiCall(
+      () => authApiClient.login(request.toJson()),
+    );
 
     if (!response.success) {
       throw AppException(response.message);

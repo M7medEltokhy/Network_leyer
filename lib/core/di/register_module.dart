@@ -18,7 +18,9 @@ abstract class RegisterModule {
         baseUrl: ApiEndpoints.baseUrl,
         connectTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 15),
+        contentType: Headers.jsonContentType,
         headers: {
+          Headers.acceptHeader: Headers.jsonContentType,
           "X-SECRET-KEY": ApiEndpoints.secretKey,
         },
       ),

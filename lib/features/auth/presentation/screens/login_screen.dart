@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:network_leyer/core/di/injector.dart';
+import 'package:network_leyer/core/utils/enums/enums.dart';
 import 'package:network_leyer/core/widgets/custom_snack_bar.dart';
 import 'package:network_leyer/core/widgets/custom_text.dart';
 import 'package:network_leyer/features/auth/presentation/cubit/login_cubit.dart';
@@ -50,20 +51,18 @@ class _LoginViewState extends State<_LoginView> {
     return Scaffold(
       body: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
-          state.when(
-            initial: () {},
-            loading: () {},
-            success: (result) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                customSnackBar(result.message, color: Colors.green),
-              );
-            },
-            failure: (message) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(customSnackBar(message, color: Colors.red));
-            },
-          );
+          if (state.status == RequestStatus.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              customSnackBar(
+                state.loginResult?.message ?? state.message ?? '',
+                color: Colors.green,
+              ),
+            );
+          } else if (state.status == RequestStatus.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              customSnackBar(state.errorMessage ?? '', color: Colors.red),
+            );
+          }
         },
         child: Stack(
           children: [
@@ -156,10 +155,7 @@ class _LoginViewState extends State<_LoginView> {
                     const SizedBox(height: 24),
                     BlocBuilder<LoginCubit, LoginState>(
                       builder: (context, state) {
-                        final isLoading = state.maybeWhen(
-                          loading: () => true,
-                          orElse: () => false,
-                        );
+                        final isLoading = state.status == RequestStatus.loading;
                         return SizedBox(
                           width: double.infinity,
                           height: 50,

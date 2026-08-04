@@ -22,11 +22,12 @@ class _AuthApiClient implements AuthApiClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<BaseResponse<LoginData>> login(LoginRequest request) async {
+  Future<BaseResponse<LoginData>> login(Map<String, dynamic> request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = request;
+    final _data = <String, dynamic>{};
+    _data.addAll(request);
     final _options = _setStreamType<BaseResponse<LoginData>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
