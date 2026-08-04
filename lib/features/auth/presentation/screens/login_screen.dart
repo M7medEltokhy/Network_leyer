@@ -155,6 +155,8 @@ class _LoginViewState extends State<_LoginView> {
 
                     const SizedBox(height: 24),
                     BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) =>
+                          previous.status != current.status,
                       builder: (context, state) {
                         final isLoading = state.status == RequestStatus.loading;
                         return SizedBox(
@@ -195,19 +197,23 @@ class _LoginViewState extends State<_LoginView> {
                         );
                       },
                     ),
+
                     const SizedBox(height: 16),
                     BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) =>
+                          previous.canResend != current.canResend ||
+                          previous.remainingSeconds !=
+                              current.remainingSeconds ||
+                          previous.loginResult != current.loginResult,
                       builder: (context, state) {
                         if (state.loginResult == null) {
                           return const SizedBox.shrink();
                         }
-
                         return state.canResend
                             ? TextButton(
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   minimumSize: Size.zero,
-                                  
                                 ),
                                 onPressed: () {
                                   context.read<LoginCubit>().resendCode(
