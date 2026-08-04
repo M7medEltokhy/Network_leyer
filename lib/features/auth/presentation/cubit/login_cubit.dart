@@ -15,14 +15,10 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     emit(LoginLoading());
     try {
-      final response = await loginUseCase(
+      final result = await loginUseCase(
         LoginRequest(phone: phone, countryCode: countryCode),
       );
-      if (response.success) {
-        emit(LoginSuccess(response.message, response.data));
-      } else {
-        emit(LoginFailure(response.message));
-      }
+      emit(LoginSuccess(result));
     } catch (e) {
       emit(LoginFailure(e.toString()));
     }

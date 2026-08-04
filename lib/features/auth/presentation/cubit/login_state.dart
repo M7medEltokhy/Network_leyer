@@ -1,4 +1,4 @@
-import 'package:network_leyer/features/auth/data/models/login_data.dart';
+import 'package:network_leyer/features/auth/domain/entities/login_result.dart';
 
 sealed class LoginState {
   const LoginState();
@@ -9,9 +9,8 @@ class LoginInitial extends LoginState {}
 class LoginLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  final String message;
-  final LoginData? data;
-  const LoginSuccess(this.message, this.data);
+  final LoginResult result;
+  const LoginSuccess(this.result);
 }
 
 class LoginFailure extends LoginState {

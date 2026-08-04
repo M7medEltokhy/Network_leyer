@@ -53,7 +53,7 @@ class _LoginViewState extends State<_LoginView> {
           if (state is LoginSuccess) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(customSnackBar(state.message, color: Colors.green));
+            ).showSnackBar(customSnackBar(state.result.message, color: Colors.green));
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(
               context,
