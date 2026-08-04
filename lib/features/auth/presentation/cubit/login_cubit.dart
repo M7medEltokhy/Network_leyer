@@ -7,20 +7,20 @@ import '../../data/models/login_request.dart';
 @injectable
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase loginUseCase;
-  LoginCubit(this.loginUseCase) : super(LoginInitial());
+  LoginCubit(this.loginUseCase) : super(const LoginState.initial());
 
   Future<void> login({
     required String phone,
     required String countryCode,
   }) async {
-    emit(LoginLoading());
+    emit(const LoginState.loading());
     try {
       final result = await loginUseCase(
         LoginRequest(phone: phone, countryCode: countryCode),
       );
-      emit(LoginSuccess(result));
+      emit(LoginState.success(result));
     } catch (e) {
-      emit(LoginFailure(e.toString()));
+      emit(LoginState.failure(e.toString()));
     }
   }
 }

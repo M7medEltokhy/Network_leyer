@@ -1,19 +1,12 @@
-import 'package:network_leyer/features/auth/domain/entities/login_result.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../domain/entities/login_result.dart';
 
-sealed class LoginState {
-  const LoginState();
-}
+part 'login_state.freezed.dart';
 
-class LoginInitial extends LoginState {}
-
-class LoginLoading extends LoginState {}
-
-class LoginSuccess extends LoginState {
-  final LoginResult result;
-  const LoginSuccess(this.result);
-}
-
-class LoginFailure extends LoginState {
-  final String message;
-  const LoginFailure(this.message);
+@freezed
+abstract class LoginState with _$LoginState {
+  const factory LoginState.initial() = LoginInitial;
+  const factory LoginState.loading() = LoginLoading;
+  const factory LoginState.success(LoginResult result) = LoginSuccess;
+  const factory LoginState.failure(String message) = LoginFailure;
 }

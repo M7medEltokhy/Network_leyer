@@ -6,10 +6,10 @@ part of 'base_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BaseResponse<T> _$BaseResponseFromJson<T>(
+_BaseResponse<T> _$BaseResponseFromJson<T>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
-) => BaseResponse<T>(
+) => _BaseResponse<T>(
   success: json['success'] as bool,
   message: json['message'] as String,
   data: _$nullableGenericFromJson(json['data'], fromJsonT),
@@ -17,7 +17,7 @@ BaseResponse<T> _$BaseResponseFromJson<T>(
 );
 
 Map<String, dynamic> _$BaseResponseToJson<T>(
-  BaseResponse<T> instance,
+  _BaseResponse<T> instance,
   Object? Function(T value) toJsonT,
 ) => <String, dynamic>{
   'success': instance.success,

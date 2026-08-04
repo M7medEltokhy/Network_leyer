@@ -50,15 +50,20 @@ class _LoginViewState extends State<_LoginView> {
     return Scaffold(
       body: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
-          if (state is LoginSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              customSnackBar(state.result.message, color: Colors.green),
-            );
-          } else if (state is LoginFailure) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(customSnackBar(state.message, color: Colors.red));
-          }
+          state.when(
+            initial: () {},
+            loading: () {},
+            success: (result) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                customSnackBar(result.message, color: Colors.green),
+              );
+            },
+            failure: (message) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(customSnackBar(message, color: Colors.red));
+            },
+          );
         },
         child: Stack(
           children: [
@@ -151,7 +156,10 @@ class _LoginViewState extends State<_LoginView> {
                     const SizedBox(height: 24),
                     BlocBuilder<LoginCubit, LoginState>(
                       builder: (context, state) {
-                        final isLoading = state is LoginLoading;
+                        final isLoading = state.maybeWhen(
+                          loading: () => true,
+                          orElse: () => false,
+                        );
                         return SizedBox(
                           width: double.infinity,
                           height: 50,
