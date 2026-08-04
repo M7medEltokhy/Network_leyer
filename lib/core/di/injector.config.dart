@@ -20,6 +20,7 @@ import '../../features/auth/data/repositories/auth_repository_impl.dart'
 import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
 import '../../features/auth/domain/usecases/login_usecase.dart' as _i188;
 import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
+import '../../features/auth/presentation/cubit/otp_cubit.dart' as _i1033;
 import '../network/interceptors/connectivity_interceptor.dart' as _i693;
 import '../network/network_info.dart' as _i932;
 import 'register_module.dart' as _i291;
@@ -53,6 +54,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i69.LoginCubit>(
       () => _i69.LoginCubit(gh<_i188.LoginUseCase>()),
+    );
+    gh.factory<_i1033.OtpCubit>(
+      () => _i1033.OtpCubit(gh<_i188.LoginUseCase>()),
     );
     return this;
   }

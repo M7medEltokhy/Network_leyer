@@ -6,6 +6,7 @@ import 'package:network_leyer/core/widgets/custom_snack_bar.dart';
 import 'package:network_leyer/core/widgets/custom_text.dart';
 import 'package:network_leyer/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:network_leyer/features/auth/presentation/cubit/login_state.dart';
+import 'package:network_leyer/features/auth/presentation/screens/otp_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -50,13 +51,21 @@ class _LoginViewState extends State<_LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<LoginCubit, LoginState>(
-        listenWhen: (previous, current) => previous.status != current.status,
+        listenWhen: (previous, current) =>
+            previous.status != current.status &&
+            (current.status == RequestStatus.success ||
+                current.status == RequestStatus.failure),
+
         listener: (context, state) {
-          if (state.status == RequestStatus.success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              customSnackBar(
-                state.loginResult?.message ?? state.message ?? '',
-                color: Colors.green,
+          if (state.status == RequestStatus.success &&
+              state.loginResult?.redirectTo == 'CODE_SCREEN') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => OtpScreen(
+                  phone: _phoneController.text.trim(),
+                  countryCode: _selectedCountryCode,
+                ),
               ),
             );
           } else if (state.status == RequestStatus.failure) {
@@ -146,7 +155,12 @@ class _LoginViewState extends State<_LoginView> {
                             },
                             decoration: const InputDecoration(
                               labelText: 'Phone Number',
-                              border: OutlineInputBorder(),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
                             ),
                           ),
                         ),
@@ -195,44 +209,6 @@ class _LoginViewState extends State<_LoginView> {
                                   ),
                           ),
                         );
-                      },
-                    ),
-
-                    const SizedBox(height: 16),
-                    BlocBuilder<LoginCubit, LoginState>(
-                      buildWhen: (previous, current) =>
-                          previous.canResend != current.canResend ||
-                          previous.remainingSeconds !=
-                              current.remainingSeconds ||
-                          previous.loginResult != current.loginResult,
-                      builder: (context, state) {
-                        if (state.loginResult == null) {
-                          return const SizedBox.shrink();
-                        }
-                        return state.canResend
-                            ? TextButton(
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: Size.zero,
-                                ),
-                                onPressed: () {
-                                  context.read<LoginCubit>().resendCode(
-                                    phone: _phoneController.text.trim(),
-                                    countryCode: _selectedCountryCode,
-                                  );
-                                },
-                                child: const Text(
-                                  'Resend Code',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              )
-                            : Text(
-                                'Resend available in ${state.remainingSeconds}s',
-                                style: const TextStyle(color: Colors.grey),
-                              );
                       },
                     ),
                   ],

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginState {
 
- RequestStatus get status; String? get message; String? get errorMessage; LoginResult? get loginResult; int get remainingSeconds; bool get canResend;
+ RequestStatus get status; String? get message; String? get errorMessage; LoginResult? get loginResult;
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LoginStateCopyWith<LoginState> get copyWith => _$LoginStateCopyWithImpl<LoginSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loginResult, loginResult) || other.loginResult == loginResult)&&(identical(other.remainingSeconds, remainingSeconds) || other.remainingSeconds == remainingSeconds)&&(identical(other.canResend, canResend) || other.canResend == canResend));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loginResult, loginResult) || other.loginResult == loginResult));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,message,errorMessage,loginResult,remainingSeconds,canResend);
+int get hashCode => Object.hash(runtimeType,status,message,errorMessage,loginResult);
 
 @override
 String toString() {
-  return 'LoginState(status: $status, message: $message, errorMessage: $errorMessage, loginResult: $loginResult, remainingSeconds: $remainingSeconds, canResend: $canResend)';
+  return 'LoginState(status: $status, message: $message, errorMessage: $errorMessage, loginResult: $loginResult)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LoginStateCopyWith<$Res>  {
   factory $LoginStateCopyWith(LoginState value, $Res Function(LoginState) _then) = _$LoginStateCopyWithImpl;
 @useResult
 $Res call({
- RequestStatus status, String? message, String? errorMessage, LoginResult? loginResult, int remainingSeconds, bool canResend
+ RequestStatus status, String? message, String? errorMessage, LoginResult? loginResult
 });
 
 
@@ -62,15 +62,13 @@ class _$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? message = freezed,Object? errorMessage = freezed,Object? loginResult = freezed,Object? remainingSeconds = null,Object? canResend = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? message = freezed,Object? errorMessage = freezed,Object? loginResult = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as RequestStatus,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,loginResult: freezed == loginResult ? _self.loginResult : loginResult // ignore: cast_nullable_to_non_nullable
-as LoginResult?,remainingSeconds: null == remainingSeconds ? _self.remainingSeconds : remainingSeconds // ignore: cast_nullable_to_non_nullable
-as int,canResend: null == canResend ? _self.canResend : canResend // ignore: cast_nullable_to_non_nullable
-as bool,
+as LoginResult?,
   ));
 }
 
@@ -155,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( RequestStatus status,  String? message,  String? errorMessage,  LoginResult? loginResult,  int remainingSeconds,  bool canResend)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( RequestStatus status,  String? message,  String? errorMessage,  LoginResult? loginResult)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult,_that.remainingSeconds,_that.canResend);case _:
+return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult);case _:
   return orElse();
 
 }
@@ -176,10 +174,10 @@ return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( RequestStatus status,  String? message,  String? errorMessage,  LoginResult? loginResult,  int remainingSeconds,  bool canResend)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( RequestStatus status,  String? message,  String? errorMessage,  LoginResult? loginResult)  $default,) {final _that = this;
 switch (_that) {
 case _LoginState():
-return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult,_that.remainingSeconds,_that.canResend);case _:
+return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +194,10 @@ return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( RequestStatus status,  String? message,  String? errorMessage,  LoginResult? loginResult,  int remainingSeconds,  bool canResend)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( RequestStatus status,  String? message,  String? errorMessage,  LoginResult? loginResult)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult,_that.remainingSeconds,_that.canResend);case _:
+return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult);case _:
   return null;
 
 }
@@ -211,15 +209,13 @@ return $default(_that.status,_that.message,_that.errorMessage,_that.loginResult,
 
 
 class _LoginState implements LoginState {
-  const _LoginState({this.status = RequestStatus.initial, this.message, this.errorMessage, this.loginResult, this.remainingSeconds = 0, this.canResend = true});
+  const _LoginState({this.status = RequestStatus.initial, this.message, this.errorMessage, this.loginResult});
   
 
 @override@JsonKey() final  RequestStatus status;
 @override final  String? message;
 @override final  String? errorMessage;
 @override final  LoginResult? loginResult;
-@override@JsonKey() final  int remainingSeconds;
-@override@JsonKey() final  bool canResend;
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +227,16 @@ _$LoginStateCopyWith<_LoginState> get copyWith => __$LoginStateCopyWithImpl<_Log
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loginResult, loginResult) || other.loginResult == loginResult)&&(identical(other.remainingSeconds, remainingSeconds) || other.remainingSeconds == remainingSeconds)&&(identical(other.canResend, canResend) || other.canResend == canResend));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.loginResult, loginResult) || other.loginResult == loginResult));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,message,errorMessage,loginResult,remainingSeconds,canResend);
+int get hashCode => Object.hash(runtimeType,status,message,errorMessage,loginResult);
 
 @override
 String toString() {
-  return 'LoginState(status: $status, message: $message, errorMessage: $errorMessage, loginResult: $loginResult, remainingSeconds: $remainingSeconds, canResend: $canResend)';
+  return 'LoginState(status: $status, message: $message, errorMessage: $errorMessage, loginResult: $loginResult)';
 }
 
 
@@ -251,7 +247,7 @@ abstract mixin class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$
   factory _$LoginStateCopyWith(_LoginState value, $Res Function(_LoginState) _then) = __$LoginStateCopyWithImpl;
 @override @useResult
 $Res call({
- RequestStatus status, String? message, String? errorMessage, LoginResult? loginResult, int remainingSeconds, bool canResend
+ RequestStatus status, String? message, String? errorMessage, LoginResult? loginResult
 });
 
 
@@ -268,15 +264,13 @@ class __$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? message = freezed,Object? errorMessage = freezed,Object? loginResult = freezed,Object? remainingSeconds = null,Object? canResend = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? message = freezed,Object? errorMessage = freezed,Object? loginResult = freezed,}) {
   return _then(_LoginState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as RequestStatus,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,loginResult: freezed == loginResult ? _self.loginResult : loginResult // ignore: cast_nullable_to_non_nullable
-as LoginResult?,remainingSeconds: null == remainingSeconds ? _self.remainingSeconds : remainingSeconds // ignore: cast_nullable_to_non_nullable
-as int,canResend: null == canResend ? _self.canResend : canResend // ignore: cast_nullable_to_non_nullable
-as bool,
+as LoginResult?,
   ));
 }
 

@@ -1,6 +1,7 @@
+// features/auth/presentation/cubit/login_state.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:network_leyer/features/auth/domain/entities/login_result.dart';
 import '../../../../core/utils/enums/enums.dart';
+import '../../domain/entities/login_result.dart';
 
 part 'login_state.freezed.dart';
 
@@ -11,7 +12,5 @@ abstract class LoginState with _$LoginState {
     String? message,
     String? errorMessage,
     LoginResult? loginResult,
-    @Default(0) int remainingSeconds,
-    @Default(true) bool canResend,
   }) = _LoginState;
 }
