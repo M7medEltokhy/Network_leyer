@@ -1,10 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:network_leyer/features/auth/data/datasources/auth_api_client.dart';
 
 import '../network/api_endpoints.dart';
 import '../network/interceptors/connectivity_interceptor.dart';
-import '../network/retrofit/api_service.dart';
 
 @module
 abstract class RegisterModule {
@@ -29,5 +29,5 @@ abstract class RegisterModule {
   }
 
   @lazySingleton
-  ApiService apiService(Dio dio) => ApiService(dio);
+  AuthApiClient authApiClient(Dio dio) => AuthApiClient(dio);
 }

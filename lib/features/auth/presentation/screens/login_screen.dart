@@ -28,7 +28,7 @@ class _LoginView extends StatefulWidget {
 class _LoginViewState extends State<_LoginView> {
   final _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String _selectedCountryCode = '+966';
+  String _selectedCountryCode = '+20';
   final List<String> _countryCodes = [
     '+20',
     '+966',
@@ -51,9 +51,9 @@ class _LoginViewState extends State<_LoginView> {
       body: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(customSnackBar(state.result.message, color: Colors.green));
+            ScaffoldMessenger.of(context).showSnackBar(
+              customSnackBar(state.result.message, color: Colors.green),
+            );
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(
               context,

@@ -14,6 +14,7 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../features/auth/data/datasources/auth_api_client.dart' as _i552;
 import '../../features/auth/data/datasources/auth_remote_data_source.dart'
     as _i107;
 import '../../features/auth/data/repositories/auth_repository_impl.dart'
@@ -23,7 +24,6 @@ import '../../features/auth/domain/usecases/login_usecase.dart' as _i188;
 import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
 import '../network/interceptors/connectivity_interceptor.dart' as _i693;
 import '../network/network_info.dart' as _i932;
-import '../network/retrofit/api_service.dart' as _i318;
 import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -44,11 +44,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(
       () => registerModule.dio(gh<_i693.ConnectivityInterceptor>()),
     );
-    gh.lazySingleton<_i318.ApiService>(
-      () => registerModule.apiService(gh<_i361.Dio>()),
+    gh.lazySingleton<_i552.AuthApiClient>(
+      () => registerModule.authApiClient(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i107.AuthRemoteDataSource>(
-      () => _i107.AuthRemoteDataSource(gh<_i318.ApiService>()),
+      () => _i107.AuthRemoteDataSource(gh<_i552.AuthApiClient>()),
     );
     gh.lazySingleton<_i787.AuthRepository>(
       () => _i153.AuthRepositoryImpl(gh<_i107.AuthRemoteDataSource>()),
