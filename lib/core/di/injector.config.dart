@@ -15,8 +15,6 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/auth/data/datasources/auth_api_client.dart' as _i552;
-import '../../features/auth/data/datasources/auth_remote_data_source.dart'
-    as _i107;
 import '../../features/auth/data/repositories/auth_repository_impl.dart'
     as _i153;
 import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
@@ -47,11 +45,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i552.AuthApiClient>(
       () => registerModule.authApiClient(gh<_i361.Dio>()),
     );
-    gh.lazySingleton<_i107.AuthRemoteDataSource>(
-      () => _i107.AuthRemoteDataSource(gh<_i552.AuthApiClient>()),
-    );
     gh.lazySingleton<_i787.AuthRepository>(
-      () => _i153.AuthRepositoryImpl(gh<_i107.AuthRemoteDataSource>()),
+      () => _i153.AuthRepositoryImpl(gh<_i552.AuthApiClient>()),
     );
     gh.factory<_i188.LoginUseCase>(
       () => _i188.LoginUseCase(gh<_i787.AuthRepository>()),
