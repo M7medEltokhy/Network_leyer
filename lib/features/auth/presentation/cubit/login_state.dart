@@ -11,5 +11,7 @@ abstract class LoginState with _$LoginState {
     String? message,
     String? errorMessage,
     LoginResult? loginResult,
+    @Default(0) int remainingSeconds,
+    @Default(true) bool canResend,
   }) = _LoginState;
 }
