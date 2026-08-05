@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:network_leyer/features/upload/presentation/screens/upload_images_screen.dart';
 import 'package:pinput/pinput.dart';
 import '../../../../core/di/injector.dart';
 import '../../../../core/utils/enums/enums.dart';
@@ -170,7 +171,14 @@ class _OtpViewState extends State<_OtpView> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade500,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => const UploadImagesScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      },
                       child: const Text(
                         'Verify',
                         style: TextStyle(
