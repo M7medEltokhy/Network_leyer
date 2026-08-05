@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:network_leyer/core/widgets/base_select.dart';
 
 import '../../../../core/utils/enums/enums.dart';
 import '../cubit/upload_cubit.dart';
@@ -23,7 +24,9 @@ class UploadHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                total == 0 ? 'No images selected' : '$uploaded of $total uploaded',
+                total == 0
+                    ? 'No images selected'
+                    : '$uploaded of $total uploaded',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               Row(
@@ -37,6 +40,28 @@ class UploadHeader extends StatelessWidget {
                     icon: const Icon(Icons.camera_alt_outlined),
                     onPressed: () =>
                         context.read<UploadCubit>().pickSingleFromCamera(),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.list_alt),
+                    onPressed: () {
+                      final items = context
+                          .read<UploadCubit>()
+                          .state
+                          .items
+                          .map((e) => e.file.path)
+                          .toList();
+
+                      BaseSelect.show<String>(
+                        context: context,
+                        title: 'Selected Images',
+                        items: items,
+                        isMultiSelect: true,
+                        itemLabel: (item) => item.split('/').last,
+                        onChanged: (value) {
+                          debugPrint(value.toString());
+                        },
+                      );
+                    },
                   ),
                 ],
               ),
