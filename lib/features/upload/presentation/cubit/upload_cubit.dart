@@ -10,7 +10,9 @@ import 'upload_state.dart';
 
 @injectable
 class UploadCubit extends Cubit<UploadState> {
-  static const Duration _minimumUploadVisibleDuration = Duration(milliseconds: 800);
+  static const Duration _minimumUploadVisibleDuration = Duration(
+    milliseconds: 800,
+  );
 
   final UploadImageUseCase uploadImageUseCase;
   final ImagePicker _picker = ImagePicker();
@@ -73,10 +75,18 @@ class UploadCubit extends Cubit<UploadState> {
       if (CancelToken.isCancel(e)) {
         _updateItem(item.id, status: UploadItemStatus.cancelled);
       } else {
-        _updateItem(item.id, status: UploadItemStatus.failed, errorMessage: e.toString());
+        _updateItem(
+          item.id,
+          status: UploadItemStatus.failed,
+          errorMessage: e.toString(),
+        );
       }
     } catch (e) {
-      _updateItem(item.id, status: UploadItemStatus.failed, errorMessage: e.toString());
+      _updateItem(
+        item.id,
+        status: UploadItemStatus.failed,
+        errorMessage: e.toString(),
+      );
     } finally {
       _cancelTokens.remove(item.id);
     }
@@ -109,7 +119,12 @@ class UploadCubit extends Cubit<UploadState> {
     emit(state.copyWith(items: []));
   }
 
-  void _updateItem(String id, {int? progress, UploadItemStatus? status, String? errorMessage}) {
+  void _updateItem(
+    String id, {
+    int? progress,
+    UploadItemStatus? status,
+    String? errorMessage,
+  }) {
     final updated = state.items.map((item) {
       if (item.id != id) return item;
       return item.copyWith(progress: progress, status: status, errorMessage: errorMessage);

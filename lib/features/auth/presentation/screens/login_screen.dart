@@ -49,78 +49,80 @@ class _LoginViewState extends State<_LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocListener<LoginCubit, LoginState>(
-        listenWhen: (previous, current) =>
-            previous.status != current.status &&
-            (current.status == RequestStatus.success ||
-                current.status == RequestStatus.failure),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: BlocListener<LoginCubit, LoginState>(
+          listenWhen: (previous, current) =>
+              previous.status != current.status &&
+              (current.status == RequestStatus.success ||
+                  current.status == RequestStatus.failure),
 
-        listener: (context, state) {
-          if (state.status == RequestStatus.success &&
-              state.loginResult?.redirectTo == 'CODE_SCREEN') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => OtpScreen(
-                  phone: _phoneController.text.trim(),
-                  countryCode: _selectedCountryCode,
+          listener: (context, state) {
+            if (state.status == RequestStatus.success &&
+                state.loginResult?.redirectTo == 'CODE_SCREEN') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => OtpScreen(
+                    phone: _phoneController.text.trim(),
+                    countryCode: _selectedCountryCode,
+                  ),
+                ),
+              );
+            } else if (state.status == RequestStatus.failure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                customSnackBar(state.errorMessage ?? '', color: Colors.red),
+              );
+            }
+          },
+          child: Stack(
+            children: [
+              Positioned(
+                top: -40,
+                right: -40,
+                child: Container(
+                  width: 160,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue.withOpacity(0.1),
+                  ),
                 ),
               ),
-            );
-          } else if (state.status == RequestStatus.failure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              customSnackBar(state.errorMessage ?? '', color: Colors.red),
-            );
-          }
-        },
-        child: Stack(
-          children: [
-            Positioned(
-              top: -40,
-              right: -40,
-              child: Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue.withOpacity(0.1),
+              Positioned(
+                top: 180,
+                left: -60,
+                child: Container(
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue.withOpacity(0.1),
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 180,
-              left: -60,
-              child: Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue.withOpacity(0.1),
-                ),
-              ),
-            ),
-            SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 250),
-                    const CustomText(
-                      text: 'Welcome Back',
-                      size: 30,
-                      weight: FontWeight.bold,
-                    ),
-                    const SizedBox(height: 6),
-                    const CustomText(
-                      text: 'Sign in to continue to your account',
-                      size: 16,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(height: 75),
-                    Row(
-                      children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 250),
+                      const CustomText(
+                        text: 'Welcome Back',
+                        size: 30,
+                        weight: FontWeight.bold,
+                      ),
+                      const SizedBox(height: 6),
+                      const CustomText(
+                        text: 'Sign in to continue to your account',
+                        size: 16,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 75),
+                      Row(
+                        children: [
                         SizedBox(
                           width: 120,
                           child: DropdownButtonFormField<String>(
@@ -142,80 +144,85 @@ class _LoginViewState extends State<_LoginView> {
                             },
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _phoneController,
-                            keyboardType: TextInputType.phone,
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Phone number is required';
-                              }
-                              return null;
-                            },
-                            decoration: const InputDecoration(
-                              labelText: 'Phone Number',
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Phone number is required';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Phone Number',
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
 
-                    const SizedBox(height: 24),
-                    BlocBuilder<LoginCubit, LoginState>(
-                      buildWhen: (previous, current) =>
-                          previous.status != current.status,
-                      builder: (context, state) {
-                        final isLoading = state.status == RequestStatus.loading;
-                        return SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue.shade500,
+                      const SizedBox(height: 24),
+                      BlocBuilder<LoginCubit, LoginState>(
+                        buildWhen: (previous, current) =>
+                            previous.status != current.status,
+                        builder: (context, state) {
+                          final isLoading =
+                              state.status == RequestStatus.loading;
+                          return SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue.shade500,
+                              ),
+                              onPressed: isLoading
+                                  ? null
+                                  : () {
+                                      if (!_formKey.currentState!.validate())
+                                        return;
+                                      context.read<LoginCubit>().login(
+                                        phone: _phoneController.text.trim(),
+                                        countryCode: _selectedCountryCode,
+                                      );
+                                    },
+                              child: isLoading
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                             ),
-                            onPressed: isLoading
-                                ? null
-                                : () {
-                                    if (!_formKey.currentState!.validate())
-                                      return;
-                                    context.read<LoginCubit>().login(
-                                      phone: _phoneController.text.trim(),
-                                      countryCode: _selectedCountryCode,
-                                    );
-                                  },
-                            child: isLoading
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Text(
-                                    'Login',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
