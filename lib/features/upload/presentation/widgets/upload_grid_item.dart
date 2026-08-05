@@ -27,23 +27,35 @@ class UploadGridItem extends StatelessWidget {
               color: Colors.black.withOpacity(0.4),
             ),
             child: Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    value: item.progress / 100,
-                    color: Colors.white,
-                    strokeWidth: 3,
-                  ),
-                  Text(
-                    '${item.progress}%',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(
+                  begin: 0,
+                  end: item.progress.clamp(0, 100).toDouble(),
+                ),
+                duration: const Duration(milliseconds: 350),
+                curve: Curves.easeOutCubic,
+                builder: (context, animatedProgress, _) {
+                  final progress = animatedProgress.round();
+
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        value: animatedProgress / 100,
+                        color: Colors.white,
+                        strokeWidth: 3,
+                      ),
+                      Text(
+                        '$progress%',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -65,7 +77,10 @@ class UploadGridItem extends StatelessWidget {
                 children: [
                   Icon(Icons.check, color: Colors.white, size: 14),
                   SizedBox(width: 4),
-                  Text('Uploaded', style: TextStyle(color: Colors.white, fontSize: 11)),
+                  Text(
+                    'Uploaded',
+                    style: TextStyle(color: Colors.white, fontSize: 11),
+                  ),
                 ],
               ),
             ),
@@ -83,7 +98,10 @@ class UploadGridItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Center(
-                child: Text('Failed', style: TextStyle(color: Colors.white, fontSize: 11)),
+                child: Text(
+                  'Failed',
+                  style: TextStyle(color: Colors.white, fontSize: 11),
+                ),
               ),
             ),
           ),

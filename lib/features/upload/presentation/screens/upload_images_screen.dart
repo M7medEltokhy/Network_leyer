@@ -32,7 +32,7 @@ class _UploadView extends StatelessWidget {
             builder: (context, state) {
               if (state.items.isEmpty) return const SizedBox.shrink();
               return IconButton(
-                icon: const Icon(Icons.delete_outline),
+                icon: const Icon(Icons.delete_outline, color: Colors.red),
                 onPressed: () => context.read<UploadCubit>().clearAll(),
               );
             },

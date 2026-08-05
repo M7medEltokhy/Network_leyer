@@ -10,6 +10,8 @@ import 'upload_state.dart';
 
 @injectable
 class UploadCubit extends Cubit<UploadState> {
+  static const Duration _minimumUploadVisibleDuration = Duration(milliseconds: 800);
+
   final UploadImageUseCase uploadImageUseCase;
   final ImagePicker _picker = ImagePicker();
   final Map<String, CancelToken> _cancelTokens = {};
@@ -45,6 +47,7 @@ class UploadCubit extends Cubit<UploadState> {
   Future<void> _uploadItem(UploadItem item) async {
     final cancelToken = CancelToken();
     _cancelTokens[item.id] = cancelToken;
+    final startedAt = DateTime.now();
 
     _updateItem(item.id, status: UploadItemStatus.uploading, progress: 0);
 
@@ -59,6 +62,12 @@ class UploadCubit extends Cubit<UploadState> {
         cancelToken: cancelToken,
       );
 
+      _updateItem(item.id, progress: 100);
+      await _keepFastUploadsVisible(startedAt);
+      if (cancelToken.isCancelled) {
+        _updateItem(item.id, status: UploadItemStatus.cancelled);
+        return;
+      }
       _updateItem(item.id, status: UploadItemStatus.success, progress: 100);
     } on DioException catch (e) {
       if (CancelToken.isCancel(e)) {
@@ -71,6 +80,14 @@ class UploadCubit extends Cubit<UploadState> {
     } finally {
       _cancelTokens.remove(item.id);
     }
+  }
+
+  Future<void> _keepFastUploadsVisible(DateTime startedAt) async {
+    final elapsed = DateTime.now().difference(startedAt);
+    final remaining = _minimumUploadVisibleDuration - elapsed;
+    if (remaining.isNegative || remaining == Duration.zero) return;
+
+    await Future.delayed(remaining);
   }
 
   void cancelUpload(String id) {
