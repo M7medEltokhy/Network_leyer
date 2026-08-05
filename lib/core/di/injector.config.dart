@@ -21,8 +21,16 @@ import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
 import '../../features/auth/domain/usecases/login_usecase.dart' as _i188;
 import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
 import '../../features/auth/presentation/cubit/otp_cubit.dart' as _i1033;
+import '../../features/upload/data/datasources/upload_remote_data_source.dart'
+    as _i429;
+import '../../features/upload/data/repos/upload_repo_impl.dart' as _i174;
+import '../../features/upload/domain/repos/upload_repo.dart' as _i710;
+import '../../features/upload/domain/usecases/upload_image_usecase.dart'
+    as _i710;
+import '../../features/upload/presentation/cubit/upload_cubit.dart' as _i895;
 import '../network/interceptors/connectivity_interceptor.dart' as _i693;
 import '../network/network_info.dart' as _i932;
+import '../network/retrofit/upload_api_service.dart' as _i46;
 import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -46,11 +54,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i552.AuthApiClient>(
       () => registerModule.authApiClient(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i46.UploadApiService>(
+      () => registerModule.uploadApiService(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i429.UploadRemoteDataSource>(
+      () => _i429.UploadRemoteDataSource(gh<_i46.UploadApiService>()),
+    );
     gh.lazySingleton<_i787.AuthRepository>(
       () => _i153.AuthRepositoryImpl(gh<_i552.AuthApiClient>()),
     );
+    gh.lazySingleton<_i710.UploadRepo>(
+      () => _i174.UploadRepoImpl(gh<_i429.UploadRemoteDataSource>()),
+    );
     gh.factory<_i188.LoginUseCase>(
       () => _i188.LoginUseCase(gh<_i787.AuthRepository>()),
+    );
+    gh.factory<_i710.UploadImageUseCase>(
+      () => _i710.UploadImageUseCase(gh<_i710.UploadRepo>()),
+    );
+    gh.factory<_i895.UploadCubit>(
+      () => _i895.UploadCubit(gh<_i710.UploadImageUseCase>()),
     );
     gh.factory<_i69.LoginCubit>(
       () => _i69.LoginCubit(gh<_i188.LoginUseCase>()),
