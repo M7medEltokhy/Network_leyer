@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:network_leyer/core/di/injector.dart';
-import 'package:network_leyer/features/auth/presentation/screens/login_screen.dart';
-
+import 'package:network_leyer/core/router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await configureDependencies();
-    
+  await configureDependencies();
+  final appRouter = AppRouter();
   runApp(
-    const MaterialApp(debugShowCheckedModeBanner: false, home: LoginScreen()),
+    MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: appRouter.config(),
+    ),
   );
 }

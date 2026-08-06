@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:network_leyer/core/widgets/base_select.dart';
-
+import 'package:network_leyer/core/router/app_router.dart';
+import 'package:network_leyer/core/widgets/base_select/models/base_select_args.dart';
+import 'package:network_leyer/core/widgets/base_select/models/selectable_item.dart';
 import '../../../../core/utils/enums/enums.dart';
 import '../cubit/upload_cubit.dart';
 import '../cubit/upload_state.dart';
@@ -43,24 +45,39 @@ class UploadHeader extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Icon(Icons.list_alt),
-                    onPressed: () {
-                      final items = context
+                    onPressed: () async {
+                      final paths = context
                           .read<UploadCubit>()
                           .state
                           .items
                           .map((e) => e.file.path)
                           .toList();
 
-                      BaseSelect.show<String>(
-                        context: context,
-                        title: 'Selected Images',
-                        items: items,
-                        isMultiSelect: true,
-                        itemLabel: (item) => item.split('/').last,
-                        onChanged: (value) {
-                          debugPrint(value.toString());
-                        },
-                      );
+                      final result = await context.router
+                          .push<List<SelectableItem>>(
+                            BaseSelectRoute(
+                              args: BaseSelectArgs(
+                                title: 'Selected Images',
+                                isMultiSelect: true,
+                                items: paths
+                                    .map(
+                                      (p) => SelectableItem(
+                                        id: p,
+                                        label: p.split('/').last,
+                                        data: p,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          );
+
+                      if (result != null) {
+                        final selectedPaths = result
+                            .map((e) => e.data as String)
+                            .toList();
+                        debugPrint(selectedPaths.toString());
+                      }
                     },
                   ),
                 ],

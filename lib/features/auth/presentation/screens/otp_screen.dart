@@ -1,6 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:network_leyer/features/upload/presentation/screens/upload_images_screen.dart';
+import 'package:network_leyer/core/router/app_router.dart';
 import 'package:pinput/pinput.dart';
 import '../../../../core/di/injector.dart';
 import '../../../../core/utils/enums/enums.dart';
@@ -9,6 +10,7 @@ import '../../../../core/widgets/custom_text.dart';
 import '../cubit/otp_cubit.dart';
 import '../cubit/otp_state.dart';
 
+@RoutePage()
 class OtpScreen extends StatelessWidget {
   final String phone;
   final String countryCode;
@@ -172,11 +174,9 @@ class _OtpViewState extends State<_OtpView> {
                         backgroundColor: Colors.blue.shade500,
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (_) => const UploadImagesScreen(),
-                          ),
-                          (route) => false,
+                        context.router.pushAndPopUntil(
+                          UploadImagesRoute(),
+                          predicate: (_) => false,
                         );
                       },
                       child: const Text(

@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:network_leyer/core/di/injector.dart';
+import 'package:network_leyer/core/router/app_router.dart';
 import 'package:network_leyer/core/utils/enums/enums.dart';
 import 'package:network_leyer/core/widgets/custom_snack_bar.dart';
 import 'package:network_leyer/core/widgets/custom_text.dart';
 import 'package:network_leyer/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:network_leyer/features/auth/presentation/cubit/login_state.dart';
-import 'package:network_leyer/features/auth/presentation/screens/otp_screen.dart';
 
+@RoutePage()
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -61,13 +63,19 @@ class _LoginViewState extends State<_LoginView> {
           listener: (context, state) {
             if (state.status == RequestStatus.success &&
                 state.loginResult?.redirectTo == 'CODE_SCREEN') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => OtpScreen(
-                    phone: _phoneController.text.trim(),
-                    countryCode: _selectedCountryCode,
-                  ),
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (_) => OtpScreen(
+              //       phone: _phoneController.text.trim(),
+              //       countryCode: _selectedCountryCode,
+              //     ),
+              //   ),
+              // );
+              context.router.push(
+                OtpRoute(
+                  phone: _phoneController.text.trim(),
+                  countryCode: _selectedCountryCode,
                 ),
               );
             } else if (state.status == RequestStatus.failure) {
@@ -123,27 +131,27 @@ class _LoginViewState extends State<_LoginView> {
                       SizedBox(height: 75),
                       Row(
                         children: [
-                        SizedBox(
-                          width: 120,
-                          child: DropdownButtonFormField<String>(
-                            initialValue: _selectedCountryCode,
-                            decoration: const InputDecoration(
-                              labelText: 'Country Code',
-                              border: OutlineInputBorder(),
+                          SizedBox(
+                            width: 120,
+                            child: DropdownButtonFormField<String>(
+                              initialValue: _selectedCountryCode,
+                              decoration: const InputDecoration(
+                                labelText: 'Country Code',
+                                border: OutlineInputBorder(),
+                              ),
+                              items: _countryCodes
+                                  .map(
+                                    (code) => DropdownMenuItem(
+                                      value: code,
+                                      child: Text(code),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() => _selectedCountryCode = value!);
+                              },
                             ),
-                            items: _countryCodes
-                                .map(
-                                  (code) => DropdownMenuItem(
-                                    value: code,
-                                    child: Text(code),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() => _selectedCountryCode = value!);
-                            },
                           ),
-                        ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: TextFormField(
